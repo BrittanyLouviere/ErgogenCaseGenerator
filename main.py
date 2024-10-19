@@ -1,16 +1,15 @@
-# This is a sample Python script.
+import cadquery as cq
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# run `cq-editor` in terminal and open this file in it for debugging
 
+def read_ergogen_file(file_path: str):
+    pass
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+8 to toggle the breakpoint.
+def generate_case():
+    return cq.Workplane("front").box(2.0, 2.0, 0.5)
 
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    pass
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+read_ergogen_file("example.yaml")
+result = generate_case()
