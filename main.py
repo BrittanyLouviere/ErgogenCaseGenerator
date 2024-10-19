@@ -16,10 +16,13 @@ def generate_case(ergogen_config):
     return cq.Workplane("front").box(2.0, 2.0, 0.5)
 
 
-ergogen_config = read_ergogen_file("output/example.yaml")
+# TODO get input_file as input from user
+input_file = "output/example.yaml"
+ergogen_config = read_ergogen_file(input_file)
 result = generate_case(ergogen_config)
 
 if __name__ == '__main__':
-    os.makedirs("output", exist_ok=True)
-    result.export("output/case.stl")
-    result.export("output/case.svg")
+    output_location = "output"
+    os.makedirs(output_location, exist_ok=True)
+    result.export(f"{output_location}/case.stl")
+    result.export(f"{output_location}/case.svg")
