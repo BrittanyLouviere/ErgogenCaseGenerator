@@ -50,7 +50,7 @@ def generate_case(ergogen_config):
                                         color=cq.Color("black"),
                                         loc=cq.Location(
                                             cq.Vector(i * spread + 7.6, j * padding + stagger + 8.75, -1.85)))
-
+    # TODO have sockets placed on Z axis with constraints
     return assembly
 
 
