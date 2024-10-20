@@ -4,7 +4,7 @@ import cadquery as cq
 import yaml
 
 
-# run `cq-editor` in terminal and open this file in it for debugging
+# run `cq-editor main.py` in terminal and open this file in it for debugging
 
 def read_ergogen_file(file_path: str):
     with open(file_path) as stream:
@@ -17,7 +17,7 @@ def generate_case(ergogen_config):
 
 
 # TODO get input_file as input from user
-input_file = "output/example.yaml"
+input_file = "input/example.yaml"
 ergogen_config = read_ergogen_file(input_file)
 result = generate_case(ergogen_config)
 
