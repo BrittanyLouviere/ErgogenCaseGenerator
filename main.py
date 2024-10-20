@@ -26,7 +26,22 @@ def expand_keys(dictionary: dict) -> dict:
 
 # units in mm
 def generate_case(ergogen_config):
-    return cq.Workplane("front").box(2.0, 2.0, 0.5)
+    pcb = cq.importers.importStep("input/example.step")
+    socket = (
+        cq.importers.importStep("input/choc_socket.STEP")
+        .rotateAboutCenter((1, 0, 0), 90)
+    )
+
+    assembly: cq.assembly = (
+        cq.Assembly()
+        .add(pcb, name="pcb", color=cq.Color("green"), loc=cq.Location(cq.Vector(-100, 100, 0)))
+        .add(socket, name=f"socket",
+             color=cq.Color("black"),
+             loc=cq.Location(
+                 cq.Vector(7.6, 8.75, -1.85)))
+    )
+
+    return assembly
 
 
 # TODO get input_file as input from user
