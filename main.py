@@ -35,11 +35,19 @@ def generate_case(ergogen_config):
     assembly: cq.assembly = (
         cq.Assembly()
         .add(pcb, name="pcb", color=cq.Color("green"), loc=cq.Location(cq.Vector(-100, 100, 0)))
-        .add(socket, name=f"socket",
-             color=cq.Color("black"),
-             loc=cq.Location(
-                 cq.Vector(7.6, 8.75, -1.85)))
     )
+
+    # TODO hardcoded for now, get from config
+    padding = 17
+    spread = 18
+
+    for (zone_key, zone_value) in ergogen_config["points"]["zones"].items():
+        for i, (column_key, column_value) in enumerate(zone_value["columns"].items()):
+            for j, (row_key, row_value) in enumerate(zone_value["rows"].items()):
+                assembly = assembly.add(socket, name=f"{zone_key}_{column_key}_{row_key}_socket",
+                                        color=cq.Color("black"),
+                                        loc=cq.Location(
+                                            cq.Vector(i * spread + 7.6, j * padding + 8.75, -1.85)))
 
     return assembly
 
