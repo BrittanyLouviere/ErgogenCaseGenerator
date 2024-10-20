@@ -63,4 +63,4 @@ if __name__ == '__main__':
     output_location = "output"
     os.makedirs(output_location, exist_ok=True)
     result.export(f"{output_location}/case.stl")
-    result.export(f"{output_location}/case.svg")
+    # result.toCompound().export(f"{output_location}/case.svg")
