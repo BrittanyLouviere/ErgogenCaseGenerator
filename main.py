@@ -8,7 +8,7 @@ from process_config import read_ergogen_file
 # run `cq-editor main.py` in terminal and open this file in it for debugging
 
 # units in mm
-def generate_case(ergogen_config):
+def generate_case(ergogen_config: dict) -> cq.Assembly:
     pcb = cq.importers.importStep("input/example.step")
     socket = (
         cq.importers.importStep("input/choc_socket.STEP")
