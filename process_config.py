@@ -13,15 +13,15 @@ def read_ergogen_file(file_path: str) -> dict:
 
 
 def expand_keys(dictionary: dict) -> dict:
-    newDictionary = {}
+    new_dictionary = {}
     for key, value in dictionary.items():
         val = expand_keys(value) if type(value) is dict else value
         if '.' in key:
             key1, key2 = key.split('.', 1)
-            newDictionary[key1] = {key2: val}
+            new_dictionary[key1] = {key2: val}
         else:
-            newDictionary[key] = val
-    return newDictionary
+            new_dictionary[key] = val
+    return new_dictionary
 
 
 def calculate_units(dictionary: dict) -> dict:
