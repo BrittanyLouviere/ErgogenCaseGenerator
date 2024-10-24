@@ -24,6 +24,21 @@ def expand_keys(dictionary: dict) -> dict:
     return new_dictionary
 
 
+def substitute_units(value: str, units: dict) -> str:
+    new_val = value
+    subbed = False
+    for (key2, value2) in units.items():
+        if key2 in new_val:
+            subbed = True
+            index = new_val.find(key2) - 1
+            new_val = (
+                ("*" + str(value2)).join(new_val.split(key2))
+                if index >= 0 and new_val[index].isnumeric()
+                else new_val.replace(key2, str(value2))
+            )
+    return eval_expr(new_val) if subbed else new_val
+
+
 def calculate_units(dictionary: dict) -> dict:
     new_units = {
         'U': 19.05,  # 19.05mm MX spacing
@@ -34,16 +49,9 @@ def calculate_units(dictionary: dict) -> dict:
     for (key, value) in dictionary['units'].items():
         if isinstance(value, (int, float, complex)):
             new_units[key] = value
+        elif isinstance(new_val := substitute_units(str(value), new_units), (int, float, complex)):
+            new_units[key] = new_val
         else:
-            new_val = str(value)
-            for (key2, value2) in new_units.items():
-                if key2 in new_val:
-                    index = new_val.find(key2) - 1
-                    new_val = (
-                        ("*" + str(value2)).join(new_val.split(key2))
-                        if index > 0 and new_val[index].isnumeric()
-                        else new_val.replace(key2, str(value2))
-                    )
             new_units[key] = eval_expr(new_val)
     dictionary['units'] = new_units
     return dictionary
@@ -61,8 +69,8 @@ def eval_expr(expr):
 
 def eval_(node):
     match node:
-        case ast.Constant(value) if isinstance(value, int):
-            return value  # integer
+        case ast.Constant(value) if isinstance(value, (int, float, complex)):
+            return value
         case ast.BinOp(left, op, right):
             return operators[type(op)](eval_(left), eval_(right))
         case ast.UnaryOp(op, operand):  # e.g., -1
