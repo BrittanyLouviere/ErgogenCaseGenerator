@@ -41,10 +41,12 @@ def generate_case(ergogen_config: dict) -> cq.Assembly:
         for i, (column_key, column_value) in enumerate(zone_value["columns"].items()):
             stagger += column_value.get("key", {}).get("stagger", 0)
             for j, (row_key, row_value) in enumerate(zone_value["rows"].items()):
-                assembly = assembly.add(socket, name=f"{zone_key}_{column_key}_{row_key}_socket",
-                                        color=cq.Color("black"),
-                                        loc=cq.Location(
-                                            cq.Vector(i * spread + 7.6, j * padding + stagger + 8.75, -1.85)))
+                if not column_value.get("rows", {}).get(row_key, {}).get("skip", False):
+                    assembly = assembly.add(socket,
+                                            name=f"{zone_key}_{column_key}_{row_key}_socket",
+                                            color=cq.Color("black"),
+                                            loc=cq.Location(
+                                                cq.Vector(i * spread + 7.6, j * padding + stagger + 8.75, -1.85)))
     # TODO have sockets placed on Z axis with constraints
     return assembly
 
