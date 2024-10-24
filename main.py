@@ -2,7 +2,7 @@ import os
 
 import cadquery as cq
 
-from process_config import read_ergogen_file
+from process_config import read_ergogen_file, substitute_units
 
 
 # run `cq-editor main.py` in terminal and open this file in it for debugging
@@ -20,14 +20,26 @@ def generate_case(ergogen_config: dict) -> cq.Assembly:
         .add(pcb, name="pcb", color=cq.Color("green"), loc=cq.Location(cq.Vector(-100, 100, 0)))
     )
 
-    # TODO hardcoded for now, get from config
-    padding = 17
-    spread = 18
+    default_stagger = ergogen_config['units'].get('$default_stagger', 0)
+    default_spread = ergogen_config['units'].get('$default_spread', substitute_units('u', ergogen_config['units']))
+    default_splay = ergogen_config['units'].get('$default_splay', 0)
+    default_height = ergogen_config['units'].get('$default_height', substitute_units('u-1', ergogen_config['units']))
+    default_width = ergogen_config['units'].get('$default_width', substitute_units('u-1', ergogen_config['units']))
+    default_padding = ergogen_config['units'].get('$default_padding', substitute_units('u', ergogen_config['units']))
+    default_autobind = ergogen_config['units'].get('$default_autobind', 10)
 
     for (zone_key, zone_value) in ergogen_config["points"]["zones"].items():
+        stagger = float(substitute_units(zone_value['key'].get('stagger', default_stagger), ergogen_config['units']))
+        spread = float(substitute_units(zone_value['key'].get('spread', default_spread), ergogen_config['units']))
+        splay = float(substitute_units(zone_value['key'].get('splay', default_splay), ergogen_config['units']))
+        height = float(substitute_units(zone_value['key'].get('height', default_height), ergogen_config['units']))
+        width = float(substitute_units(zone_value['key'].get('width', default_width), ergogen_config['units']))
+        padding = float(substitute_units(zone_value['key'].get('padding', default_padding), ergogen_config['units']))
+        autobind = float(substitute_units(zone_value['key'].get('autobind', default_autobind), ergogen_config['units']))
+
         stagger = 0
         for i, (column_key, column_value) in enumerate(zone_value["columns"].items()):
-            stagger += column_value["key"].get("stagger", 0)
+            stagger += column_value.get("key", {}).get("stagger", 0)
             for j, (row_key, row_value) in enumerate(zone_value["rows"].items()):
                 assembly = assembly.add(socket, name=f"{zone_key}_{column_key}_{row_key}_socket",
                                         color=cq.Color("black"),
