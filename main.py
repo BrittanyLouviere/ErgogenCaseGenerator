@@ -37,7 +37,6 @@ def generate_case(ergogen_config: dict) -> cq.Assembly:
         padding = float(substitute_units(zone_value['key'].get('padding', default_padding), ergogen_config['units']))
         autobind = float(substitute_units(zone_value['key'].get('autobind', default_autobind), ergogen_config['units']))
 
-        stagger = 0
         for i, (column_key, column_value) in enumerate(zone_value["columns"].items()):
             stagger += column_value.get("key", {}).get("stagger", 0)
             for j, (row_key, row_value) in enumerate(zone_value["rows"].items()):
