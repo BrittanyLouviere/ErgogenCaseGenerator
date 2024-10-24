@@ -25,7 +25,7 @@ def expand_keys(dictionary: dict) -> dict:
 
 
 def substitute_units(value: str, units: dict) -> str:
-    new_val = value
+    new_val = str(value)
     subbed = False
     for (key2, value2) in units.items():
         if key2 in new_val:
